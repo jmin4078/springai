@@ -1,7 +1,11 @@
 package org.example.springai.config;
 
+import org.example.springai.domain.NimProperties;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
+import org.springframework.ai.google.genai.common.GoogleGenAiThinkingLevel;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +43,34 @@ public class ChatClientConfig {
         return ChatClient
                 .builder(chatModel)
                 .defaultSystem(systemMessage)
+                .defaultOptions(GoogleGenAiChatOptions.builder()
+                        // gemini-3.5-flash-lite -> gemini-3.1-flash-lite
+                        .model("gemini-3.5-flash-lite")
+//                        .model("gemini-3.1-flash-lite")
+                        .thinkingLevel(GoogleGenAiThinkingLevel.LOW))
+                .build();
+    }
+
+    @Bean
+    public ChatModel nimChatModel(NimProperties nimProperties) {
+        return OpenAiChatModel.builder()
+                .options(
+                        OpenAiChatOptions.builder()
+                                .baseUrl(nimProperties.baseUrl())
+                                .apiKey(nimProperties.apiKey())
+                                .model(nimProperties.chat().model())
+                                .build()
+                ).build();
+    }
+
+    @Bean
+    public ChatClient nimChatClient(@Qualifier("nimChatModel") ChatModel chatModel) {
+        String model = "stepfun-ai/step-3.7-flash";
+        return ChatClient
+                .builder(chatModel)
+                .defaultSystem(systemMessage)
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .model(model))
                 .build();
     }
 }
