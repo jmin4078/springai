@@ -1,9 +1,8 @@
 package org.example.springai.service;
 
-
-import com.openai.models.ChatModel;
 import lombok.RequiredArgsConstructor;
 import org.example.springai.dto.ChatDTO;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
