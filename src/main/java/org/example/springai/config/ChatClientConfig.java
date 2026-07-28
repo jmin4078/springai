@@ -2,6 +2,7 @@ package org.example.springai.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,17 @@ public class ChatClientConfig {
     @Primary
     @Bean
     public ChatClient groqChatClient(@Qualifier("openAiChatModel") ChatModel chatModel) {
+        String model = "qwen/qwen3.6-27b";
         return ChatClient
                 .builder(chatModel)
                 .defaultSystem(systemMessage)
+//                .defaultOptions(ChatOptions.builder()
+//                        // openai/gpt-oss-120b
+//                        .model("qwen/qwen3.6-27b")
+//                        ) // .build() X -> builder 자체를 넣어야함
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .model(model)
+                        .reasoningEffort("none")) // 모델과 프로바이더마다 조금씩 설정 작성 방법이 다 다름
                 .build();
     }
 
