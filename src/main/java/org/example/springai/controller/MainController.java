@@ -20,7 +20,6 @@ public class MainController {
 
     @GetMapping
     public String index(Model model) {
-
         model.addAttribute("providers", ModelProvider.values());
         return "index";
     }
