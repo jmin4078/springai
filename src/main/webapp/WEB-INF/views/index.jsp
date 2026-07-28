@@ -9,6 +9,11 @@
 <section>
     <form method="post">
         <input name="message" placeholder="질문을 작성해주세요">
+        <select name="provider">
+            <c:forEach items="${providers}" var="provider">
+                <option value="${provider}">${provider}</option>
+            </c:forEach>
+        </select>
         <button>전송</button>
     </form>
 </section>
